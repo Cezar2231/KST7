@@ -26,6 +26,28 @@ char* vigener_encrypt(char* plaintext, char* key){
     return cipher;
 }
 
+char* vigener_decrypt(char* cipher, char* key){
+    int lenght = strlen(cipher);
+    int key_lenght = strlen(key);
+    char* plaintext = (char*) malloc(sizeof(char) * (lenght + 1));
+    int index = 0;
+    while(cipher[index] != '\0'){
+        int shift = tolower(key[index % key_lenght]) - 'a';
+        if(islower(cipher[index])){
+            plaintext[index] = 'a' + (cipher[index] - 'a' - shift + 26) % 26;
+        }
+        else if(isupper(cipher[index])){
+            plaintext[index] = 'A' + (cipher[index] - 'A' - shift + 26) % 26;
+        }
+        else{
+            plaintext[index] = cipher[index];
+        }
+        index++;
+    }
+    plaintext[index] = '\0';
+    return plaintext;
+}
+
 int main(){
     char plaintext[MAXN];
     scanf("%s", plaintext);
@@ -34,7 +56,12 @@ int main(){
     scanf("%s", key);
     
     char* result = vigener_encrypt(plaintext, key);
-    printf("%s", result);
+    printf("Encripted message: %s\n", result);
+    
+    char* decripted = vigener_decrypt(result, key);
+    printf("Decripted message: %s\n", decripted);
+    
+    
     
     return EXIT_SUCCESS;
 }
