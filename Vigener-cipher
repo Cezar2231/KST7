@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#define MAXN 1024
+
+char* vigener_encrypt(char* plaintext, char* key){
+    int lenght = strlen(plaintext);
+    int key_lenght = strlen(key);
+    char* cipher = (char*) malloc(sizeof(char) * (lenght + 1));
+    int index = 0;
+    while(plaintext[index] != '\0'){
+        int shift = tolower(key[index % key_lenght]) - 'a';
+        if(islower(plaintext[index])){
+            cipher[index] = 'a' + (plaintext[index] - 'a' + shift) % 26;
+        }
+        else if(isupper(plaintext[index])){
+            cipher[index] = 'A' + (plaintext[index] - 'A' + shift) % 26;
+        }
+        else{
+            cipher[index] = plaintext[index];
+        }
+        index++;
+    }
+    cipher[index] = '\0';
+    return cipher;
+}
+
+int main(){
+    char plaintext[MAXN];
+    scanf("%s", plaintext);
+    
+    char key[MAXN];
+    scanf("%s", key);
+    
+    char* result = vigener_encrypt(plaintext, key);
+    printf("%s", result);
+    
+    return EXIT_SUCCESS;
+}
