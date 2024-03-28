@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define MAXN 1024
+
+char* caesar_decypher(char* str, int key)
+{
+    int length = strlen(str);
+    
+    char* cypher = (char*) malloc((length + 1) * sizeof(char));
+    
+    int i = 0;
+    while(str[i] != '\0')
+    {
+        cypher[i] = (str[i] - 'a' - key + 26) % 26 + 'a';
+        i++;
+    }
+    cypher[i] = '\0';
+    return cypher;
+}
+
+char* read_cypher(char* filename_cypher)
+{
+    FILE* file = fopen(filename_cypher, "r");
+    
+    if (file == NULL)
+    {
+        printf("Error opening the file.");
+        return NULL;
+    }
+    
+    char* cypher = (char*) malloc( MAXN * sizeof(char) );
+    if(fgets(cypher, MAXN, file) == NULL)
+    {
+        printf("Error reading from file.");
+        return NULL;
+    }
+    
+    fclose(file);
+    return cypher;
+}
+
+int read_key(char* filename_key)
+{
+    FILE* file2 = fopen(filename_key, "r");
+    
+    if (file2 == NULL)
+    {
+        printf("Error opening the file.");
+        return 0;
+    }
+    char* input = (char*) malloc( MAXN * sizeof(char) );
+    if(fgets(input, MAXN, file2) == NULL)
+    {
+        printf("Error reading from file.");
+        return 0;
+    }
+    
+    fclose(file2);
+    int key = atoi(input);
+    return key;
+}
+
+int main()
+{
+    char* filename_cypher = "filename_cypher.txt";
+    char* filename_key = "filename_key.txt";
+    
+    char* cypher = read_cypher(filename_cypher);
+    int key = read_key(filename_key);
+    
+    char* result = caesar_decypher(cypher, key);
+    
+    printf("%s\n", result);
+    
+}
